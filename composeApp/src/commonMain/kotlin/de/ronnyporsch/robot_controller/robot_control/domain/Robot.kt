@@ -7,13 +7,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.Socket
 
-
 object Robot {
-    fun moveJ(jointPositions: List<Double>, a: Double = 1.2, v: Double = 0.25, callback: (Result<Unit>) -> Unit) {
+    fun move(jointPositions: List<Double>, a: Double, v: Double, movementType: MovementType, callback: (Result<Unit>) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val jointPositionsString = jointPositions.joinToString(prefix = "[", postfix = "]", separator = ", ")
-                val command = "movej($jointPositionsString, a=$a, v=$v)\n"
+                val moveTypeAsString = when(movementType) {
+                    MovementType.MOVE_J -> "movej"
+                    MovementType.MOVE_P -> "movep"
+                    MovementType.MOVE_L -> "movel"
+                }
+                val command = "$moveTypeAsString($jointPositionsString, a=$a, v=$v)\n"
 
                 Socket(ROBOT_IP, ROBOT_PORT).use { socket ->
                     socket.getOutputStream().use { out ->
@@ -30,4 +34,9 @@ object Robot {
     }
 }
 
+enum class MovementType {
+    MOVE_J,
+    MOVE_P,
+    MOVE_L
+}
 

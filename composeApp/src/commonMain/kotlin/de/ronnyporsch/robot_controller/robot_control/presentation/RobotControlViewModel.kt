@@ -1,6 +1,7 @@
 package de.ronnyporsch.robot_controller.robot_control.presentation
 
 import androidx.lifecycle.ViewModel
+import de.ronnyporsch.robot_controller.robot_control.domain.MovementType
 import de.ronnyporsch.robot_controller.robot_control.domain.Robot
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +31,7 @@ class RobotControlViewModel : ViewModel() {
             val a = _uiState.value.acceleration.toDouble()
             val v = _uiState.value.velocity.toDouble()
 
-            Robot.moveJ(jointPositions, a, v, ::robotMoveCallback)
+            Robot.move(jointPositions, a, v, MovementType.MOVE_L, ::robotMoveCallback)
 
             _uiState.value = _uiState.value.copy(errorMessage = null)
         } catch (e: Exception) {
