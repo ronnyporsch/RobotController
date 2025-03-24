@@ -19,7 +19,8 @@ fun RobotControlScreen(viewModel: RobotControlViewModel) {
                 value = value,
                 onValueChange = { viewModel.updateJointValue(index, it) },
                 label = { Text("Joint ${index + 1}") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -28,7 +29,8 @@ fun RobotControlScreen(viewModel: RobotControlViewModel) {
             value = uiState.acceleration,
             onValueChange = { viewModel.updateAcceleration(it) },
             label = { Text("Acceleration (a)") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -36,7 +38,8 @@ fun RobotControlScreen(viewModel: RobotControlViewModel) {
             value = uiState.velocity,
             onValueChange = { viewModel.updateVelocity(it) },
             label = { Text("Velocity (v)") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true
         )
         Spacer(modifier = Modifier.height(16.dp))
 
