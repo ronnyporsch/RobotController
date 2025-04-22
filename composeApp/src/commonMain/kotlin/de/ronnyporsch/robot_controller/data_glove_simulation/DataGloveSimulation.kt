@@ -1,11 +1,15 @@
 package de.ronnyporsch.robot_controller.data_glove_simulation
 
-fun startDataGloveSimulation() {
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.coroutineScope
+
+suspend fun startDataGloveSimulation() = coroutineScope {
     val frameGen = SmoothFrameGenerator()
-    for (i in 0 .. 999) {
+    while (isActive) {
         val frame = frameGen.generateFrame()
         println(frame)
-        //TODO send frame to robot
-        Thread.sleep(32) //32 ms sleep time to reach roughly 30 fps output
+        //TODO send frames to robot
+        delay(32) // 32 ms delay to reach roughly 30 fps output
     }
 }

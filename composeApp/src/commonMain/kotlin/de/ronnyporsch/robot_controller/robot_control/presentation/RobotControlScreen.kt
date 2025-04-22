@@ -43,8 +43,23 @@ fun RobotControlScreen(viewModel: RobotControlViewModel) {
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { viewModel.submit() }) {
-            Text("Submit")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Button(
+                onClick = { viewModel.submit() },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Submit")
+            }
+
+            Button(
+                onClick = { viewModel.toggleGloveSimulation() },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(if (uiState.gloveSimulationRunning) "Stop Simulation" else "Start Simulation")
+            }
         }
     }
 
