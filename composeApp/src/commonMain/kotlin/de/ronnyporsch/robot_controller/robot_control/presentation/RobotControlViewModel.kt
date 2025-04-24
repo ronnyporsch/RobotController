@@ -17,6 +17,12 @@ import kotlinx.coroutines.sync.withLock
 
 class RobotControlViewModel : ViewModel() {
 
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            Robot.listenForCurrentPoseContinuously()
+        }
+    }
+
     private val _uiState = MutableStateFlow(RobotControlUiState())
     val uiState = _uiState.asStateFlow()
 

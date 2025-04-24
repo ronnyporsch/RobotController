@@ -3,6 +3,7 @@ package de.ronnyporsch.robot_controller.robot_control.domain
 import de.ronnyporsch.robot_controller.ROBOT_IP
 import de.ronnyporsch.robot_controller.ROBOT_COMMAND_PORT
 import de.ronnyporsch.robot_controller.ROBOT_DATA_PORT
+import de.ronnyporsch.robot_controller.data_glove_simulation.Frame
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,13 +13,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 object Robot {
-    val currentRobotPose = MutableStateFlow(DoubleArray(6))
-
-    init {
-        CoroutineScope(Dispatchers.IO).launch {
-            listenForCurrentPositionContinuously()
-        }
-    }
+    private val currentRobotPose = MutableStateFlow(DoubleArray(6))
 
     fun move(
         jointPositions: List<Double>,
@@ -51,10 +46,15 @@ object Robot {
         }
     }
 
-    suspend fun listenForCurrentPositionContinuously(): Nothing {
+    fun move(frame: Frame) {
+        TODO("Not yet implemented")
+    }
+
+    suspend fun listenForCurrentPoseContinuously(): Nothing {
+        println("starting to listen for robot pose continuously")
         Socket(ROBOT_IP, ROBOT_DATA_PORT).use { socket ->
             socket.getInputStream().use { input ->
-                println("📡 [Recv] Verbunden mit RT Interface (Port 30003)")
+                println("Connected via port ${socket.port})")
                 val buffer = ByteArray(1108)
                 while (true) {
                     val bytesRead = input.read(buffer)
@@ -67,11 +67,7 @@ object Robot {
                                 .getDouble()
                         }
                         currentRobotPose.emit(tcpPose)
-                        System.out.printf(
-                            "🔎 [Recv] TCP-Pos: X=%.3f, Y=%.3f, Z=%.3f | RX=%.3f, RY=%.3f, RZ=%.3f\n",
-                            tcpPose[0], tcpPose[1], tcpPose[2],
-                            tcpPose[3], tcpPose[4], tcpPose[5]
-                        )
+                        println("current pose: $tcpPose")
                     }
                 }
             }
